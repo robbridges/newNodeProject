@@ -1,0 +1,2 @@
+This overwrites the current notes.txt file 
+This message however is only used to append to it, and does not change it
