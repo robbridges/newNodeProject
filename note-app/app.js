@@ -5,7 +5,7 @@ import chalk from 'chalk'
 
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
-import {getNotes, addNote, loadNotes} from './notes.js';
+import {addNote,  removeNote, listNotes} from './notes.js';
 
 const yargsObject = yargs(hideBin(process.argv));
 const userInput= yargs(hideBin(process.argv)).argv
@@ -38,9 +38,16 @@ yargsObject.command({
 yargsObject.command({
   command: 'remove', 
   describe: 'remove a note', 
-   
-  handler: () => {
-    console.log('Removing old note!');
+  builder: {
+    title: {
+      describe: 'Note Title',
+      demandOption: true,
+      type: 'string',
+    }
+  }, 
+  handler: (argv) => {
+    
+    removeNote(argv.title);
   }
 });
 
@@ -50,9 +57,8 @@ yargsObject.command({
 yargsObject.command({
   command: 'list',
   describe: 'list notes',
-  
   handler: () => {
-    console.log('Listing your notes');
+    listNotes();
   }
 });
 

@@ -5,7 +5,7 @@ import fs from 'fs';
 const getNotes = () => {
   return "Your notes";
 }
-
+// add a note
 const addNote = (title, body) => {
   const notes = loadNotes();
 
@@ -19,15 +19,40 @@ const addNote = (title, body) => {
       body,
     })
     saveNotes(notes);
-    console.log(chalk.green(' New note added'));
+    console.log(chalk.green('New note added'));
   } else {
     console.log(chalk.red("You've already added a note of this title"));
   }
-
-  
-
-  
 }
+
+//remove notes
+
+const removeNote = (title) => {
+  const notes = loadNotes();
+
+  const newNotes = notes.filter((note) => {
+    return note.title !== title;
+  });
+
+
+  if (newNotes.length < notes.length) {
+    console.log(chalk.bgGreen.black('Note removed'));
+    saveNotes(newNotes);
+  } else {
+    console.log(chalk.bgRed('Note not found'));
+  }
+}
+
+// list all notes
+
+const listNotes = () => {
+  const notes = loadNotes();
+  console.log(chalk.blue.inverse('Your notes'));
+  notes.forEach((note) => {
+    console.log(note.title);
+  })
+}
+ 
 
 const saveNotes = (notes) => {
   const dataJSON = JSON.stringify(notes);
@@ -49,7 +74,8 @@ const loadNotes = () => {
 // module.exports = getNotes;
 
 export {
-  getNotes,
+  
   addNote,
-  loadNotes,
+  removeNote,
+  listNotes,
 }
