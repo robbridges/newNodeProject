@@ -2,18 +2,14 @@ import chalk from 'chalk';
 import fs from 'fs';
 
 
-const getNotes = () => {
-  return "Your notes";
-}
+
 // add a note
 const addNote = (title, body) => {
   const notes = loadNotes();
+  
+  const duplicateNoteSingular = notes.find((note) => note.title === title);
 
-  const duplicateNotes = notes.filter( (note) => {
-    return note.title === title;
-  })
-
-  if (!duplicateNotes.length) {
+  if (!duplicateNoteSingular) {
     notes.push({
       title,
       body,
@@ -52,6 +48,21 @@ const listNotes = () => {
     console.log(note.title);
   })
 }
+
+// read specific note
+
+const readNote = (title) => {
+  const notes = loadNotes();
+  const noteToRead = notes.find((note) => note.title === title);
+  if (noteToRead) {
+    console.log(chalk.bold.underline('Title: %s'), noteToRead.title);
+    console.log('Body: ' + noteToRead.body);
+  } else {
+    console.log(chalk.red.inverse('No note found!'))
+  }
+}
+
+
  
 
 const saveNotes = (notes) => {
@@ -70,12 +81,12 @@ const loadNotes = () => {
   
 }
 
-// non es6 syntax
-// module.exports = getNotes;
+
 
 export {
   
   addNote,
   removeNote,
   listNotes,
+  readNote,
 }

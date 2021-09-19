@@ -5,7 +5,7 @@ import chalk from 'chalk'
 
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
-import {addNote,  removeNote, listNotes} from './notes.js';
+import {addNote,  removeNote, listNotes, readNote} from './notes.js';
 
 const yargsObject = yargs(hideBin(process.argv));
 const userInput= yargs(hideBin(process.argv)).argv
@@ -68,9 +68,15 @@ yargsObject.command({
 yargsObject.command({
   command: 'read', 
   describe: 'read note', 
-  
-  handler: () => {
-    console.log('reading note context');
+  builder: {
+    title: {
+      describe: 'Note title to be read',
+      demandOption: true,
+      type: 'string',
+    }
+  },    
+  handler: (argv) => {
+    readNote(argv.title);
   }
 });
 
