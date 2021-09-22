@@ -16,5 +16,8 @@
     "url": "https://github.com/robbridges/newNodeProject/issues"
   },
   "homepage": "https://github.com/robbridges/newNodeProject#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@types/yargs": "^17.0.3"
+  }
 }
