@@ -1,40 +1,30 @@
-setTimeout(() => {
-  console.log('Two seconds are up');
-}, 2000)
-
-
-
-const names = ['Rob', 'Mike', 'Steve'];
-
-const shortName = names.filter((name) => {
-  return name.length <= 4;
+"use strict";
+setTimeout(function () {
+    console.log('Two seconds are up');
+}, 2000);
+var names = ['Rob', 'Mike', 'Steve'];
+var shortName = names.filter(function (name) {
+    return name.length <= 4;
 });
-
 console.log(shortName);
-
-const geocode = (address, callback) => {
-  setTimeout(() => {
-    const data = {
-      latitude: 0,
-      longitude: 0,
-    }
-  
-    callback(data)
-  }, 2000)
-}
-
-geocode('djjdwlak', (data) => {
-  console.log(data);
+var geocode = function (address, callback) {
+    setTimeout(function () {
+        var data = {
+            latitude: 0,
+            longitude: 0,
+        };
+        callback(data);
+    }, 2000);
+};
+geocode('djjdwlak', function (data) {
+    console.log(data);
 });
-
-const add = (num1, num2, callback) => {
-  setTimeout(() => {
-    const result = num1 + num2;
-    callback(result);
-  }, 2000)
-}
-add(1,4, (sum) => {
-  console.log(sum);
-})
-
-
+var add = function (num1, num2, callback) {
+    setTimeout(function () {
+        var result = num1 + num2;
+        callback(result);
+    }, 2000);
+};
+add(1, 4, function (sum) {
+    console.log(sum);
+});

@@ -1,5 +1,5 @@
-"use strict";
-var fs = require('fs');
+const fs = require('fs');
+
 // const book = {
 //   title: 'Harry Potter',
 //   author: 'JK rowling.',
@@ -8,14 +8,24 @@ var fs = require('fs');
 // const bookJson =JSON.stringify(book);
 // // Turn it back to JS object
 // const regularObject =JSON.parse(bookJson);
+
 // fs.writeFileSync('1-json.json', bookJson)
+
 // const dataBuffer = fs.readFileSync('1-json.json');
 // const dataJSON = dataBuffer.toString();
+
 // const data = JSON.parse(dataJSON);
+
 // console.log(data.author);
-var JSONdata = fs.readFileSync('1-json.json');
-var objectData = JSON.parse(JSONdata);
-objectData.name = "Rob";
-objectData.age = "33";
-var newJSONData = JSON.stringify(objectData);
+
+const JSONdata = fs.readFileSync('1-json.json');
+const objectData = JSON.parse(JSONdata);
+
+objectData.name = "Rob"
+objectData.age = "33"
+const newJSONData = JSON.stringify(objectData);
 fs.writeFileSync('1-json.json', newJSONData);
+
+
+
+
