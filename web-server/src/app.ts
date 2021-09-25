@@ -34,7 +34,7 @@ app.get('/about', (req, res) => {
 
 app.get('/help', (req,res) => {
   res.render('help', {
-    title: 'Come here if you are seeking help',
+    title: 'Help',
     message: 'Yeah this is an unfinished page. No help to find here'
   });
 });
