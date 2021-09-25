@@ -1,16 +1,22 @@
 import path = require('path');
 import express = require('express');
+const hbs = require('hbs');
 
 
 const publicDir = path.join(__dirname, '../public');
-
+const viewPaths = path.join(__dirname, '../templates/views');
+const partialPaths = path.join(__dirname, '../templates/partials');
 
 const app = express();
 
-app.set('views', path.join(__dirname, '../views'));
-
+app.set('views', viewPaths);
 app.set('view engine', 'hbs')
-app.use(express.static(publicDir))
+
+hbs.registerPartials(partialPaths);
+
+app.use(express.static(publicDir));
+
+
 
 
 app.get('', (req, res) => {
@@ -38,7 +44,21 @@ app.get('/weather', (req, res) => {
     forcast: 'sunny',
     location: 'the bronx',
   });
+});
+
+app.get('/help/*', (req, res) => {
+  res.render('notFound', {
+    title: 'Help article not found',
+    errorMessage: 'The help article requested could not be found',
+  });
 })
+
+app.get('*', (req, res) => {
+  res.render('notFound', {
+    title: 'Page not found',
+    errorMessage: 'The page you requested is not found',
+  });
+});
 
 let port : number = 3000
 
