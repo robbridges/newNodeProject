@@ -1,5 +1,7 @@
 import path = require('path');
 import express = require('express');
+import {getWeatherData} from './utils/weather.js';
+import { getLocationData } from './utils/location.js';
 const hbs = require('hbs');
 
 
@@ -40,11 +42,31 @@ app.get('/help', (req,res) => {
 });
 
 app.get('/weather', (req, res) => {
-  res.send({
-    forcast: 'sunny',
-    location: 'the bronx',
-  });
+  if (!req.query.address) {
+    return res.send({
+      error: 'You must provide an address',
+    })
+  }
+
+  
+  
+  const returnWeatherData = async (location: any) => {
+    const weatherData = await getWeatherData(location)
+    const locationData = await getLocationData(location);
+    return res.send({
+      data: weatherData,
+      location: locationData
+    })
+  }
+
+  returnWeatherData(req.query.address);
+
+  
+
+  
+  
 });
+
 
 app.get('/help/*', (req, res) => {
   res.render('notFound', {

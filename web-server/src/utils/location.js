@@ -36,74 +36,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var path = require("path");
-var express = require("express");
-var weather_js_1 = require("./utils/weather.js");
-var location_js_1 = require("./utils/location.js");
-var hbs = require('hbs');
-var publicDir = path.join(__dirname, '../public');
-var viewPaths = path.join(__dirname, '../templates/views');
-var partialPaths = path.join(__dirname, '../templates/partials');
-var app = express();
-app.set('views', viewPaths);
-app.set('view engine', 'hbs');
-hbs.registerPartials(partialPaths);
-app.use(express.static(publicDir));
-app.get('', function (req, res) {
-    res.render('index', {
-        title: 'Weather App',
-        name: 'Rob Bridges'
-    });
-});
-app.get('/about', function (req, res) {
-    res.render('about', {
-        title: 'About us'
-    });
-});
-app.get('/help', function (req, res) {
-    res.render('help', {
-        title: 'Help',
-        message: 'Yeah this is an unfinished page. No help to find here'
-    });
-});
-app.get('/weather', function (req, res) {
-    if (!req.query.address) {
-        return res.send({
-            error: 'You must provide an address'
-        });
-    }
-    var returnWeatherData = function (location) { return __awaiter(void 0, void 0, void 0, function () {
-        var weatherData, locationData;
+exports.getLocationData = void 0;
+var axios_1 = require("axios");
+var getLocationData = function (location) {
+    if (location === void 0) { location = 'yakima'; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var data, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, weather_js_1.getWeatherData)(location)];
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1["default"].get("https://api.mapbox.com/geocoding/v5/mapbox.places/" + location + ".json?access_token=pk.eyJ1Ijoicm9iLWJyaWRnZXMiLCJhIjoiY2t0czBqN3Z5MWJxMTJwbzMzeDU4aHgzeCJ9.obkBOhszx7ZArn7rpnLsEw&limit=1")];
                 case 1:
-                    weatherData = _a.sent();
-                    return [4 /*yield*/, (0, location_js_1.getLocationData)(location)];
+                    data = (_a.sent()).data;
+                    return [2 /*return*/, data];
                 case 2:
-                    locationData = _a.sent();
-                    return [2 /*return*/, res.send({
-                            data: weatherData,
-                            location: locationData
-                        })];
+                    e_1 = _a.sent();
+                    console.error(e_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
-    }); };
-    returnWeatherData(req.query.address);
-});
-app.get('/help/*', function (req, res) {
-    res.render('notFound', {
-        title: 'Help article not found',
-        errorMessage: 'The help article requested could not be found'
     });
-});
-app.get('*', function (req, res) {
-    res.render('notFound', {
-        title: 'Page not found',
-        errorMessage: 'The page you requested is not found'
-    });
-});
-var port = 3000;
-app.listen(port, function () {
-    console.log("Server has started on " + port);
-});
+};
+exports.getLocationData = getLocationData;
