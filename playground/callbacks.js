@@ -1,30 +1,42 @@
 "use strict";
-setTimeout(function () {
-    console.log('Two seconds are up');
-}, 2000);
-var names = ['Rob', 'Mike', 'Steve'];
-var shortName = names.filter(function (name) {
-    return name.length <= 4;
-});
-console.log(shortName);
-var geocode = function (address, callback) {
+// setTimeout(() => {
+//   console.log('Two seconds are up');
+// }, 2000)
+// const names = ['Rob', 'Mike', 'Steve'];
+// const shortName = names.filter((name) => {
+//   return name.length <= 4;
+// });
+// console.log(shortName);
+// const geocode = (address : string, callback: Function) => {
+//   setTimeout(() => {
+//     const data = {
+//       latitude: 0,
+//       longitude: 0,
+//     }
+//     callback(data)
+//   }, 2000)
+// }
+// geocode('djjdwlak', (data : string) : void => {
+//   console.log(data);
+// });
+// const add = (num1 : number, num2 : number, callback : Function) => {
+//   setTimeout(() => {
+//     const result = num1 + num2;
+//     callback(result);
+//   }, 2000)
+// }
+// add(1,4, (sum : number) : void => {
+//   console.log(sum);
+// })
+var doWorkCallBack = function (callback) {
     setTimeout(function () {
-        var data = {
-            latitude: 0,
-            longitude: 0,
-        };
-        callback(data);
+        //callback('This is my error!', undefined)
+        callback(undefined, 'Success!');
     }, 2000);
 };
-geocode('djjdwlak', function (data) {
-    console.log(data);
-});
-var add = function (num1, num2, callback) {
-    setTimeout(function () {
-        var result = num1 + num2;
-        callback(result);
-    }, 2000);
-};
-add(1, 4, function (sum) {
-    console.log(sum);
+doWorkCallBack(function (error, result) {
+    if (error) {
+        return console.log(error);
+    }
+    console.log(result);
 });

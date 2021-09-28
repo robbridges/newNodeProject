@@ -19,5 +19,8 @@
   "description": "",
   "dependencies": {
     "@types/yargs": "^17.0.3"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^4.0.7"
   }
 }
