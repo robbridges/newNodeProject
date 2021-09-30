@@ -47,71 +47,83 @@ var app = (0, express_1.default)();
 var port = process.env.PORT || 3000;
 app.use(express_1.default.json());
 app.post('/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 user = new user_1.default(req.body);
-                return [4 /*yield*/, user.save().then(function () {
-                        res.send(user);
-                    }).catch(function (e) {
-                        res.status(400).send(e);
-                    })];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, user.save()];
+            case 2:
                 _a.sent();
-                return [2 /*return*/];
+                res.status(201).send(user);
+                return [3 /*break*/, 4];
+            case 3:
+                e_1 = _a.sent();
+                res.status(400).send(e_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
 app.post('/tasks', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var task;
+    var task, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 task = new task_1.default(req.body);
-                return [4 /*yield*/, task.save().then(function () {
-                        res.send(task);
-                    }).catch(function (e) {
-                        res.status(400).send(e);
-                    })];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, task.save()];
+            case 2:
                 _a.sent();
-                return [2 /*return*/];
+                res.status(201).send(task);
+                return [3 /*break*/, 4];
+            case 3:
+                e_2 = _a.sent();
+                res.status(400).send(e_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
 app.get('/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, user_1.default.find({}).then(function (users) {
-                    res.send(users);
-                }).catch(function (e) {
-                    res.status(500).send(e);
-                })];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, user_1.default.find({})];
             case 1:
-                _a.sent();
-                return [2 /*return*/];
+                users = _a.sent();
+                res.send(users);
+                return [3 /*break*/, 3];
+            case 2:
+                e_3 = _a.sent();
+                res.status(500).send(e_3);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
 app.get('/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _id;
+    var _id, user;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _id = req.params.id;
-                return [4 /*yield*/, user_1.default.findById(_id).then(function (user) {
-                        if (!user) {
-                            return res.status(404).send();
-                        }
-                        res.send(user);
-                    }).catch(function (e) {
-                        res.status(400).send(e);
-                    })];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
+        _id = req.params.id;
+        try {
+            user = user_1.default.findById(_id);
+            if (!user) {
+                return [2 /*return*/, res.status(404).send()];
+            }
+            res.send(user);
         }
+        catch (e) {
+            res.status(400).send(e);
+        }
+        return [2 /*return*/];
     });
 }); });
 app.get('/tasks', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {

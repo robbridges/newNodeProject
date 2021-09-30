@@ -30,5 +30,5 @@ const updateUserAndReturnCount = async (id : string, age: number) => {
 updateUserAndReturnCount('6152a10a1cb015f3194e921a', 23).then((count) => {
   console.log(count);
 }).catch((e) => {
-  console.log(e);
+  console.log(e)
 });
