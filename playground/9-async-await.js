@@ -35,36 +35,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var addition = function (a, b) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            if (a < 0 || b < 0) {
+                return reject('Numbers must be non negative');
+            }
+            resolve(a + b);
+        }, 2000);
+    });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-require('../src/db/mongoose');
-var task_1 = __importDefault(require("../src/models/task"));
-// Task.findByIdAndDelete('6152a384de212b59a60471db').then((task) => {
-//   console.log(`${task} is to be deleted`);
-//   return Task.countDocuments({ completed: false});
-// }).then((result) => {
-//   console.log(result);
-// }).catch((e) => {
-//   console.log(e);
-// });
-var deleteTaskAndCountRecords = function (id, completed) { return __awaiter(void 0, void 0, void 0, function () {
-    var deletedTask, count;
+var doWork = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var sum, sum2, sum3;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, task_1.default.findByIdAndDelete(id)];
+            case 0: return [4 /*yield*/, addition(1, 99)];
             case 1:
-                deletedTask = _a.sent();
-                return [4 /*yield*/, task_1.default.countDocuments({ completed: completed })];
+                sum = _a.sent();
+                return [4 /*yield*/, addition(sum, 50)];
             case 2:
-                count = _a.sent();
-                return [2 /*return*/, count];
+                sum2 = _a.sent();
+                return [4 /*yield*/, addition(sum2, -3)];
+            case 3:
+                sum3 = _a.sent();
+                return [2 /*return*/, sum3];
         }
     });
 }); };
-deleteTaskAndCountRecords('6152a36303ee57bbbd495e2a', false).then(function (count) {
-    console.log(count);
+doWork().then(function (result) {
+    console.log(result);
 }).catch(function (e) {
     console.log(e);
 });
