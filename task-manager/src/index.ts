@@ -19,9 +19,6 @@ app.post('/users', async (req,res) => {
   } catch (e) {
     res.status(400).send(e);
   }
-
-  
-
 });
 
 app.post('/tasks', async (req, res) => {
@@ -33,8 +30,6 @@ app.post('/tasks', async (req, res) => {
   } catch (e) {
     res.status(400).send(e);
   }
-  
-  
 });
 
 app.get('/users', async (req, res) => {
@@ -45,10 +40,6 @@ app.get('/users', async (req, res) => {
   } catch (e) {
     res.status(500).send(e);
   }
-
-  
-  
- 
 });
 
 app.get('/users/:id', async (req,res) => {
@@ -56,7 +47,7 @@ app.get('/users/:id', async (req,res) => {
 
   
   try {
-    const user = User.findById(_id);
+    const user = await User.findById(_id);
     if (!user) {
       return res.status(404).send();
     }
@@ -69,23 +60,28 @@ app.get('/users/:id', async (req,res) => {
 });
 
 app.get('/tasks', async (req, res) => {
-  await Task.find({}).then((tasks) => {
-     res.send(tasks);
-  }).catch((e) => {
+  
+  try {
+    const tasks = await Task.find({})
+    res.send(tasks);
+  } catch (e) {
     res.status(500).send(e);
-  })
+  }
+  
+  
 });
 
 app.get('/tasks/:id', async (req,res) => {
   const _id = req.params.id
-  await Task.findById(_id).then((task) => {
+  try {
+    const task = await Task.findById(_id);
     if (!task) {
-      return res.status(404).send();
+      res.status(404).send();
     }
     res.send(task);
-  }).catch((e) => {
+  } catch (e) {
     res.status(500).send(e);
-  })
+  }
 })
 
 app.listen( port, () => {
