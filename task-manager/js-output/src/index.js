@@ -68,30 +68,8 @@ app.post('/users', function (req, res) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); });
-app.post('/tasks', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var task, e_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                task = new task_1.default(req.body);
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, task.save()];
-            case 2:
-                _a.sent();
-                res.status(201).send(task);
-                return [3 /*break*/, 4];
-            case 3:
-                e_2 = _a.sent();
-                res.status(400).send(e_2);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
 app.get('/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, e_3;
+    var users, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -102,15 +80,15 @@ app.get('/users', function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.send(users);
                 return [3 /*break*/, 3];
             case 2:
-                e_3 = _a.sent();
-                res.status(500).send(e_3);
+                e_2 = _a.sent();
+                res.status(500).send(e_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
 app.get('/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _id, user, e_4;
+    var _id, user, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -127,15 +105,81 @@ app.get('/users/:id', function (req, res) { return __awaiter(void 0, void 0, voi
                 res.send(user);
                 return [3 /*break*/, 4];
             case 3:
+                e_3 = _a.sent();
+                res.status(400).send(e_3);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+app.patch('/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, e_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, user_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })];
+            case 1:
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, res.status(404).send()];
+                }
+                res.send(user);
+                return [3 /*break*/, 3];
+            case 2:
                 e_4 = _a.sent();
                 res.status(400).send(e_4);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+app.patch('/tasks/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var task, e_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, task_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })];
+            case 1:
+                task = _a.sent();
+                if (!task) {
+                    return [2 /*return*/, res.status(404).send()];
+                }
+                res.send(task);
+                return [3 /*break*/, 3];
+            case 2:
+                e_5 = _a.sent();
+                res.status(400).send(e_5);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+app.post('/tasks', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var task, e_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                task = new task_1.default(req.body);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, task.save()];
+            case 2:
+                _a.sent();
+                res.status(201).send(task);
+                return [3 /*break*/, 4];
+            case 3:
+                e_6 = _a.sent();
+                res.status(400).send(e_6);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
 app.get('/tasks', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tasks, e_5;
+    var tasks, e_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -146,15 +190,15 @@ app.get('/tasks', function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.send(tasks);
                 return [3 /*break*/, 3];
             case 2:
-                e_5 = _a.sent();
-                res.status(500).send(e_5);
+                e_7 = _a.sent();
+                res.status(500).send(e_7);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
 app.get('/tasks/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _id, task, e_6;
+    var _id, task, e_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -171,8 +215,8 @@ app.get('/tasks/:id', function (req, res) { return __awaiter(void 0, void 0, voi
                 res.send(task);
                 return [3 /*break*/, 4];
             case 3:
-                e_6 = _a.sent();
-                res.status(500).send(e_6);
+                e_8 = _a.sent();
+                res.status(500).send(e_8);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
