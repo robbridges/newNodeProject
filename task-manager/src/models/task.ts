@@ -4,6 +4,7 @@ import {Schema, model} from 'mongoose';
 interface Task {
   description: string,
   completed: boolean,
+  [key: string ]: string | boolean
 }
 
 

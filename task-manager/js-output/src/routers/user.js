@@ -109,24 +109,29 @@ router.get('/users/:id', function (req, res) { return __awaiter(void 0, void 0, 
     });
 }); });
 router.patch('/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, e_4;
+    var updates, user_2, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, user_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })];
+                _a.trys.push([0, 3, , 4]);
+                updates = Object.keys(req.body);
+                return [4 /*yield*/, user_1.default.findById(req.params.id)];
             case 1:
-                user = _a.sent();
-                if (!user) {
+                user_2 = _a.sent();
+                updates.forEach(function (update) { return user_2[update] = req.body[update]; });
+                return [4 /*yield*/, user_2.save()];
+            case 2:
+                _a.sent();
+                if (!user_2) {
                     return [2 /*return*/, res.status(404).send()];
                 }
-                res.send(user);
-                return [3 /*break*/, 3];
-            case 2:
+                res.send(user_2);
+                return [3 /*break*/, 4];
+            case 3:
                 e_4 = _a.sent();
                 res.status(400).send(e_4);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

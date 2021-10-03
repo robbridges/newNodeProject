@@ -1,18 +1,14 @@
 import {Schema, model} from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcrypt';
 
 interface User {
   name: string,
   age: number,
   email: string,
   password: string,
+  [key: string]: string | number,
 }
-
-interface Task {
-  description: string,
-  completed: boolean,
-}
-
 
 
 const userSchema = new Schema<User>({
@@ -57,6 +53,16 @@ const userSchema = new Schema<User>({
 
 
 });
+
+userSchema.pre('save', async function(next) {
+  const user = this;
+
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  next()
+})
 
 export default model<User>('user', userSchema);
 

@@ -109,18 +109,21 @@ router.get('/tasks/:id', function (req, res) { return __awaiter(void 0, void 0, 
     });
 }); });
 router.patch('/tasks/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var task, e_4;
+    var updates, task_2, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, task_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })];
+                updates = Object.keys(req.body);
+                return [4 /*yield*/, task_1.default.findById(req.params.id)];
             case 1:
-                task = _a.sent();
-                if (!task) {
+                task_2 = _a.sent();
+                updates.forEach(function (update) { return task_2[update] = req.body[update]; });
+                task_2.save();
+                if (!task_2) {
                     return [2 /*return*/, res.status(404).send()];
                 }
-                res.send(task);
+                res.send(task_2);
                 return [3 /*break*/, 3];
             case 2:
                 e_4 = _a.sent();
