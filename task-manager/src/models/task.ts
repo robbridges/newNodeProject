@@ -7,7 +7,7 @@ interface Task {
   [key: string ]: string | boolean
 }
 
-
+// this interface seems much more simple than the user model. We'll probably add more to it, but for now it works. NO need to overcomplicate with unused fuctionality yet
 
 
 

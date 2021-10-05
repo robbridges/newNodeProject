@@ -39,6 +39,7 @@ router.get('/tasks/:id', async (req,res) => {
   }
 });
 
+// I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/tasks/:id', async (req, res) => {
   try {
     const updates = Object.keys(req.body);

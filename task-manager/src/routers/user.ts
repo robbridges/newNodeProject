@@ -14,6 +14,7 @@ router.post('/users', async (req,res) => {
   }
 });
 
+// simple sign in Method, with our static findByCredentials added to the user model file, returns user if found, or error if not
 router.post('/users/login', async (req, res) => {
   
 
@@ -48,7 +49,7 @@ router.get('/users/:id', async (req,res) => {
     res.status(400).send(e);
   }
 });
-
+// I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/users/:id', async (req, res) => {
   try {
     const updates = Object.keys(req.body);
