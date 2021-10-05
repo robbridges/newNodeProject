@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import {Schema, model, Document} from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 
@@ -8,7 +8,11 @@ interface User {
   email: string,
   password: string,
   [key: string]: string | number,
+  
 }
+
+
+
 
 
 const userSchema = new Schema<User>({
@@ -28,6 +32,7 @@ const userSchema = new Schema<User>({
   },
   email: {
     type: String,
+    unique: true,
     required: true,
     trim: true,
     lowercase: true,
@@ -48,11 +53,23 @@ const userSchema = new Schema<User>({
       }
     }
   }
-
-  
-
-
 });
+
+userSchema.statics.findByCredentials = async function (email: string, password: string)  {
+  const user = await this.findOne({email});
+
+  if (!user) {
+    throw new Error('Unable to login');
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new Error('Unable to login');
+  }
+
+  return user;
+}
 
 userSchema.pre('save', async function(next) {
   const user = this;
