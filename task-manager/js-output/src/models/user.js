@@ -53,7 +53,13 @@ const userSchema = new mongoose_1.Schema({
                 throw new Error('Password cannot include password');
             }
         }
-    }
+    },
+    tokens: [{
+            token: {
+                type: String,
+                required: true,
+            }
+        }]
 });
 //todo 10/5/2021 you need to find a way to fix the ts error, It should be as simple as adding a new type that extends the model and adding that in the DOC.
 userSchema.statics.findByCredentials = function (email, password) {
@@ -73,6 +79,8 @@ userSchema.methods.generateAuthToken = function () {
     return __awaiter(this, void 0, void 0, function* () {
         const user = this;
         const token = jsonwebtoken_1.default.sign({ _id: user._id.toString() }, 'yamyamyoyam');
+        user.tokens = user.tokens.concat({ token });
+        yield user.save();
         return token;
     });
 };

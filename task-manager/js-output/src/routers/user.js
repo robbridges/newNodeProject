@@ -19,7 +19,9 @@ router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const user = new user_1.default(req.body);
     try {
         yield user.save();
-        res.status(201).send(user);
+        //@ts-ignore
+        const token = yield user.generateAuthToken();
+        res.status(201).send({ user, token });
     }
     catch (e) {
         res.status(400).send(e);

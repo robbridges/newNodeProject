@@ -8,7 +8,8 @@ interface User {
   age: number,
   email: string,
   password: string,
-  [key: string]: string | number,
+  tokens: [string],
+  [key: string]: string | number | Array<string>,
   
 }
 
@@ -53,7 +54,13 @@ const userSchema = new Schema<User>({
         throw new Error('Password cannot include password');
       }
     }
-  }
+  },
+  tokens: [{
+    token: {
+      type: String, 
+      required: true,
+    }
+  }]
 });
 
 
@@ -77,6 +84,8 @@ userSchema.statics.findByCredentials = async function (email: string, password: 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign( {_id: user._id.toString() }, 'yamyamyoyam');
+  user.tokens = user.tokens.concat({token});
+  await user.save();
   return token;
 }
 
