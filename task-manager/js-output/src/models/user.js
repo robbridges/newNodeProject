@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const validator_1 = __importDefault(require("validator"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -54,6 +55,7 @@ const userSchema = new mongoose_1.Schema({
         }
     }
 });
+//todo 10/5/2021 you need to find a way to fix the ts error, It should be as simple as adding a new type that extends the model and adding that in the DOC.
 userSchema.statics.findByCredentials = function (email, password) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield this.findOne({ email });
@@ -65,6 +67,13 @@ userSchema.statics.findByCredentials = function (email, password) {
             throw new Error('Unable to login');
         }
         return user;
+    });
+};
+userSchema.methods.generateAuthToken = function () {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = this;
+        const token = jsonwebtoken_1.default.sign({ _id: user._id.toString() }, 'yamyamyoyam');
+        return token;
     });
 };
 userSchema.pre('save', function (next) {

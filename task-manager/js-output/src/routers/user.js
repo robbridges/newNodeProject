@@ -25,11 +25,13 @@ router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(400).send(e);
     }
 }));
+// simple sign in Method, with our static findByCredentials added to the user model file, returns user if found, or error if not
 router.post('/users/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //@ts-ignore
         const user = yield user_1.default.findByCredentials(req.body.email, req.body.password);
-        res.send(user);
+        const token = yield user.generateAuthToken();
+        res.send({ user, token });
     }
     catch (e) {
         res.status(400).send(e);
@@ -57,6 +59,7 @@ router.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(400).send(e);
     }
 }));
+// I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updates = Object.keys(req.body);

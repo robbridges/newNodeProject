@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require('../src/db/mongoose');
 const task_1 = __importDefault(require("../src/models/task"));
+//the below works, we can chain multiple promises this way, but the asyc await syntax left in this file is much more clean and easy to work with. leaving for visibility
 // Task.findByIdAndDelete('6152a384de212b59a60471db').then((task) => {
 //   console.log(`${task} is to be deleted`);
 //   return Task.countDocuments({ completed: false});

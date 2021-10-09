@@ -1,6 +1,7 @@
 import {Schema, model, Document} from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 interface User {
   name: string,
@@ -71,6 +72,12 @@ userSchema.statics.findByCredentials = async function (email: string, password: 
   }
 
   return user;
+}
+
+userSchema.methods.generateAuthToken = async function () {
+  const user = this;
+  const token = jwt.sign( {_id: user._id.toString() }, 'yamyamyoyam');
+  return token;
 }
 
 userSchema.pre('save', async function(next) {

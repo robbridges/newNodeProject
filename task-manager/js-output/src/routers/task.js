@@ -47,6 +47,7 @@ router.get('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(500).send(e);
     }
 }));
+// I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updates = Object.keys(req.body);
