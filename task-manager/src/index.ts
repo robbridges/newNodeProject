@@ -1,5 +1,5 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
+
 
 import userRouter from './routers/user';
 import taskRouter from './routers/task';
@@ -8,8 +8,8 @@ require('./db/mongoose'); // we actually don't need to do anything with this imp
 
 
 const app = express();
-
 const port = process.env.PORT || 3000;
+
 
 app.use(express.json());
 app.use(userRouter);

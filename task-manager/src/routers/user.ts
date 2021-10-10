@@ -1,5 +1,20 @@
 import express from 'express';
 import User from '../models/user';
+import authenticateUser from '../middleware/auth';
+
+// we need to create a mock user interface if the id and email that we'll need for logins, then we need to change expresses Global configuration to add use as an object on the request type
+interface User {
+  _id: string,
+  email: string,
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
 
 const router = express.Router();
 
@@ -31,13 +46,8 @@ router.post('/users/login', async (req, res) => {
   }
 });
 
-router.get('/users', async (req, res) => {
-  try {
-    const users = await User.find({})
-    res.send(users);
-  } catch (e) {
-    res.status(500).send(e);
-  }
+router.get('/users/me',authenticateUser , async (req, res) => {
+  res.send(req.user)
 });
 
 router.get('/users/:id', async (req,res) => {

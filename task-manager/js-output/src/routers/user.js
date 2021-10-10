@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../models/user"));
+const auth_1 = __importDefault(require("../middleware/auth"));
 const router = express_1.default.Router();
 router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = new user_1.default(req.body);
@@ -39,14 +40,8 @@ router.post('/users/login', (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(400).send(e);
     }
 }));
-router.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const users = yield user_1.default.find({});
-        res.send(users);
-    }
-    catch (e) {
-        res.status(500).send(e);
-    }
+router.get('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.send(req.user);
 }));
 router.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _id = req.params.id;
