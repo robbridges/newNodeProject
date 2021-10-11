@@ -39,7 +39,7 @@ router.get('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const task = yield task_1.default.findById(_id);
         if (!task) {
-            res.status(404).send();
+            return res.status(404).send();
         }
         res.send(task);
     }

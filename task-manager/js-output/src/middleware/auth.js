@@ -22,6 +22,7 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         if (!user) {
             throw new Error();
         }
+        req.token = token;
         req.user = user;
         next();
     }

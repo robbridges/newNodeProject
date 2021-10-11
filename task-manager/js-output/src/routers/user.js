@@ -40,6 +40,30 @@ router.post('/users/login', (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(400).send(e);
     }
 }));
+router.post('/users/logout', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token;
+        });
+        yield req.user.save();
+        res.send();
+    }
+    catch (e) {
+        res.status(500).send();
+    }
+}));
+// this session deleted all bearer tokens on the current user. We clear out the array by splicing every index, from 0 to the length of the array, then saving the user and their
+//new empty array of bearer tokens. 
+router.post('/users/logoutAll', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        req.user.tokens.splice(0, req.user.tokens.length);
+        yield req.user.save();
+        res.send();
+    }
+    catch (e) {
+        res.status(500).send();
+    }
+}));
 router.get('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(req.user);
 }));

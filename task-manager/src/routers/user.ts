@@ -6,12 +6,19 @@ import authenticateUser from '../middleware/auth';
 interface User {
   _id: string,
   email: string,
+  tokens: string[],
+  save: Function
+}
+
+interface Token {
+  token: string;
 }
 
 declare global {
   namespace Express {
     interface Request {
       user?: User;
+      token?: Token | string;
     }
   }
 }
@@ -43,6 +50,31 @@ router.post('/users/login', async (req, res) => {
     res.send({user, token});
   } catch (e) {
     res.status(400).send(e);
+  }
+});
+
+router.post('/users/logout', authenticateUser, async (req,res) => {
+  try {
+    req.user!.tokens = req.user!.tokens.filter((token : any) => {
+      return token.token !== req.token;
+    })
+    await req.user!.save();
+
+    res.send()
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+// this session deleted all bearer tokens on the current user. We clear out the array by splicing every index, from 0 to the length of the array, then saving the user and their
+//new empty array of bearer tokens. 
+router.post('/users/logoutAll', authenticateUser, async (req,res) => {
+  try {
+    req.user!.tokens.splice(0, req.user!.tokens.length);
+    await req.user!.save();
+
+    res.send();
+  } catch (e) {
+    res.status(500).send();
   }
 });
 

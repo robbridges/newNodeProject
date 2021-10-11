@@ -15,6 +15,7 @@ const auth = async (req : express.Request, res : express.Response, next : Functi
     if (!user) {
       throw new Error();
     }
+    req.token = token;
     req.user = user;
     next();
   } catch (e) {
