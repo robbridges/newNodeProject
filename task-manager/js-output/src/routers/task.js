@@ -14,9 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const task_1 = __importDefault(require("../models/task"));
+const auth_1 = __importDefault(require("../middleware/auth"));
 const router = express_1.default.Router();
-router.post('/tasks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const task = new task_1.default(req.body);
+router.post('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // we are going to link specific users to tasks. Users should not be able to do anything if it's not their task.
+    const task = new task_1.default(Object.assign(Object.assign({}, req.body), { owner: req.user._id }));
     try {
         yield task.save();
         res.status(201).send(task);

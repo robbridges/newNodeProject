@@ -67,43 +67,26 @@ router.post('/users/logoutAll', auth_1.default, (req, res) => __awaiter(void 0, 
 router.get('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(req.user);
 }));
-router.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const _id = req.params.id;
-    try {
-        const user = yield user_1.default.findById(_id);
-        if (!user) {
-            return res.status(404).send();
-        }
-        res.send(user);
-    }
-    catch (e) {
-        res.status(400).send(e);
-    }
-}));
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
-router.patch('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updates = Object.keys(req.body);
-        //const user = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
-        const user = yield user_1.default.findById(req.params.id);
-        updates.forEach((update) => user[update] = req.body[update]);
-        yield user.save();
-        if (!user) {
-            return res.status(404).send();
-        }
-        res.send(user);
+        updates.forEach((update) => req.user[update] = req.body[update]);
+        yield req.user.save();
+        res.send(req.user);
     }
     catch (e) {
         res.status(400).send(e);
     }
 }));
-router.delete('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield user_1.default.findByIdAndDelete(req.params.id);
-        if (!user) {
-            return res.status(404).send();
-        }
-        res.send(user);
+        // const user = await User.findByIdAndDelete(req.user?._id);
+        // if (!user) {
+        //   return res.status(404).send();
+        // }
+        yield req.user.remove();
+        res.send(req.user);
     }
     catch (e) {
         res.status(500).send();

@@ -7,7 +7,8 @@ interface User {
   _id: string,
   email: string,
   tokens: string[],
-  save: Function
+  save: Function,
+  remove: Function
 }
 
 interface Token {
@@ -17,7 +18,7 @@ interface Token {
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      user?: User | any;
       token?: Token | string;
     }
   }
@@ -81,49 +82,26 @@ router.post('/users/logoutAll', authenticateUser, async (req,res) => {
 router.get('/users/me',authenticateUser , async (req, res) => {
   res.send(req.user)
 });
-
-router.get('/users/:id', async (req,res) => {
-  const _id = req.params.id;
-  
-  try {
-    const user = await User.findById(_id);
-    if (!user) {
-      return res.status(404).send();
-    }
-    res.send(user);
-  } catch (e) {
-    res.status(400).send(e);
-  }
-});
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/me', authenticateUser, async (req, res) => {
   try {
     const updates = Object.keys(req.body);
-    
-    //const user = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
-    const user = await User.findById(req.params.id);
-    
-    updates.forEach((update) => user![update]   = req.body[update]);
-
-    await user!.save();
-
-
-    if (!user) {
-      return res.status(404).send();
-    }
-    res.send(user);
+    updates.forEach((update) => req.user![update]   = req.body[update]);
+    await req.user!.save();
+    res.send(req.user);
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/me', authenticateUser, async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      return res.status(404).send();
-    }
-    res.send(user);
+    // const user = await User.findByIdAndDelete(req.user?._id);
+    // if (!user) {
+    //   return res.status(404).send();
+    // }
+    await req.user!.remove();
+    res.send(req.user);
   } catch (e) {
     res.status(500).send();
   }

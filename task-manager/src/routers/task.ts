@@ -1,11 +1,16 @@
 import express from 'express';
 import Task from '../models/task';
+import authenticateUser from '../middleware/auth';
 
 const router = express.Router();
 
 
-router.post('/tasks', async (req, res) => {
-  const task = new Task(req.body);
+router.post('/tasks', authenticateUser, async (req, res) => {
+  // we are going to link specific users to tasks. Users should not be able to do anything if it's not their task.
+  const task = new Task({
+    ...req.body,
+    owner: req.user._id
+  });
 
   try {
     await task.save();

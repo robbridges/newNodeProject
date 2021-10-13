@@ -1,9 +1,11 @@
-import {Schema, model} from 'mongoose';
+import {Schema, model, } from 'mongoose';
+const mongoose = require('mongoose');
 
 
 interface Task {
   description: string,
   completed: boolean,
+  owner: string,
   [key: string ]: string | boolean
 }
 
@@ -21,6 +23,10 @@ const taskSchema = new Schema<Task>({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  }
 });
 
 
