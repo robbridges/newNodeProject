@@ -16,6 +16,7 @@ const taskSchema = new mongoose_1.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+        ref: 'user'
     }
 });
 exports.default = (0, mongoose_1.model)('task', taskSchema);

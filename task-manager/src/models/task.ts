@@ -26,6 +26,7 @@ const taskSchema = new Schema<Task>({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: 'user'
   }
 });
 

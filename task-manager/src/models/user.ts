@@ -64,6 +64,12 @@ const userSchema = new Schema<User>({
   }]
 });
 
+userSchema.virtual('tasks', {
+  ref: 'task',
+  localField: '_id',
+  foreignField: 'owner'
+});
+
 
 //todo 10/5/2021 you need to find a way to fix the ts error, It should be as simple as adding a new type that extends the model and adding that in the DOC.
 userSchema.statics.findByCredentials = async function (email: string, password: string)  {
