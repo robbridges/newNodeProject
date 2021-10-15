@@ -28,6 +28,8 @@ const taskSchema = new Schema<Task>({
     required: true,
     ref: 'user'
   }
+}, {
+  timestamps: true,
 });
 
 
