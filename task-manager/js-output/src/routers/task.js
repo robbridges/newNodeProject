@@ -27,19 +27,19 @@ router.post('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, vo
         res.status(400).send(e);
     }
 }));
-router.get('/tasks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const tasks = yield task_1.default.find({});
-        res.send(tasks);
+        yield req.user.populate('tasks');
+        res.send(req.user.tasks);
     }
     catch (e) {
         res.status(500).send(e);
     }
 }));
-router.get('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/tasks/:id', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _id = req.params.id;
     try {
-        const task = yield task_1.default.findById(_id);
+        const task = yield task_1.default.findOne({ _id, owner: req.user._id });
         if (!task) {
             return res.status(404).send();
         }
@@ -50,24 +50,25 @@ router.get('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 }));
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
-router.patch('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch('/tasks/:id', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updates = Object.keys(req.body);
-        const task = yield task_1.default.findById(req.params.id);
-        updates.forEach((update) => task[update] = req.body[update]);
-        task.save();
+        const task = yield task_1.default.findOne({ _id: req.params.id, owner: req.user._id });
         if (!task) {
             return res.status(404).send();
         }
+        updates.forEach((update) => task[update] = req.body[update]);
+        task.save();
         res.send(task);
     }
     catch (e) {
         res.status(400).send(e);
     }
 }));
-router.delete('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/tasks/:id', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const task = yield task_1.default.findByIdAndDelete(req.params.id);
+        // we actually are changing up how users can view tasks. Only tasks created by that user can patched, deleted. exct, this changes our mongoose function a bit. Nothing too big.
+        const task = yield task_1.default.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
         if (!task) {
             return res.status(404).send();
         }
