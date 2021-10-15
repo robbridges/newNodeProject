@@ -16,6 +16,7 @@ const mongoose_1 = require("mongoose");
 const validator_1 = __importDefault(require("validator"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const task_1 = __importDefault(require("./task"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -102,6 +103,13 @@ userSchema.pre('save', function (next) {
         if (user.isModified('password')) {
             user.password = yield bcrypt_1.default.hash(user.password, 8);
         }
+        next();
+    });
+});
+userSchema.pre('remove', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = this;
+        yield task_1.default.deleteMany({ owner: user._id });
         next();
     });
 });

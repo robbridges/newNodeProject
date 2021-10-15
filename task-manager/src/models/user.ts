@@ -2,6 +2,7 @@ import {Schema, model, Document} from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Task from './task';
 
 interface User {
   name: string,
@@ -114,6 +115,12 @@ userSchema.pre('save', async function(next) {
   }
 
   next()
+});
+
+userSchema.pre('remove', async function(next) {
+  const user = this;
+  await Task.deleteMany({owner: user._id})
+  next();
 })
 
 export default model<User>('user', userSchema);
