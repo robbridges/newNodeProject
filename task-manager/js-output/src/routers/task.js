@@ -27,9 +27,35 @@ router.post('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, vo
         res.status(400).send(e);
     }
 }));
+// GET /tasks?limit=10
+// GeT /tasks?limit=10&skip=10
+// GET /tasks?sortBy=createdAt_asc
 router.get('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // /tasks?completed=true will return only tasks for the user that are marked as completed, where as /tasks=false will return all non complete tasks for the user. Though I really do not
+    // see this api and a user ever generating 1000 tasks it's a good skill to have, not supply the query string will return all tasks without the filtration.
+    const match = {};
+    const sort = {};
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true';
+    }
+    if (req.query.sortBy) {
+        //@ts-ignore
+        const parts = req.query.sortBy.split(':');
+        //@ts-ignore
+        sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+    }
     try {
-        yield req.user.populate('tasks');
+        yield req.user.populate({
+            path: 'tasks',
+            match,
+            options: {
+                //@ts-ignore
+                limit: parseInt(req.query.limit),
+                //@ts-ignore
+                skip: parseInt(req.query.skip),
+                sort,
+            }
+        });
         res.send(req.user.tasks);
     }
     catch (e) {

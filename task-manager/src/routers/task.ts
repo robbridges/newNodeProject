@@ -1,8 +1,14 @@
 import express from 'express';
 import Task from '../models/task';
 import authenticateUser from '../middleware/auth';
+import { number } from 'yargs';
 
 const router = express.Router();
+
+interface Match  {
+  completed? : boolean
+  
+}
 
 
 router.post('/tasks', authenticateUser, async (req, res) => {
@@ -21,10 +27,40 @@ router.post('/tasks', authenticateUser, async (req, res) => {
 });
 
 
+// GET /tasks?limit=10
+// GeT /tasks?limit=10&skip=10
+// GET /tasks?sortBy=createdAt_asc
 router.get('/tasks', authenticateUser,  async (req, res) => {
-  
+  // /tasks?completed=true will return only tasks for the user that are marked as completed, where as /tasks=false will return all non complete tasks for the user. Though I really do not
+  // see this api and a user ever generating 1000 tasks it's a good skill to have, not supply the query string will return all tasks without the filtration.
+  const match : Match = {}
+
+  const sort = {}
+
+  if (req.query.completed) {
+    match.completed = req.query.completed === 'true';
+  }
+
+  if (req.query.sortBy) {
+    //@ts-ignore
+    const parts= req.query.sortBy.split(':');
+    //@ts-ignore
+    sort[parts[0]] = parts[1] ==='desc' ? -1 : 1
+  }
+
+
   try {
-    await req.user.populate('tasks');
+    await req.user.populate({
+      path: 'tasks',
+      match,
+      options: {
+        //@ts-ignore
+        limit: parseInt(req.query.limit),
+        //@ts-ignore
+        skip: parseInt(req.query.skip),
+        sort,
+      }
+    });
     res.send(req.user.tasks);
   } catch (e) {
     res.status(500).send(e);
