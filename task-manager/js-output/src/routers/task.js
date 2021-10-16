@@ -37,13 +37,12 @@ router.get('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, voi
     const sort = {};
     const limit = req.query.limit;
     const skip = req.query.skip;
+    const sortBy = req.query.sortBy;
     if (req.query.completed) {
         match.completed = req.query.completed === 'true';
     }
     if (req.query.sortBy) {
-        //@ts-ignore
-        const parts = req.query.sortBy.split(':');
-        //@ts-ignore
+        const parts = sortBy.split(':');
         sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
     }
     try {

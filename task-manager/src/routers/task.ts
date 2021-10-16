@@ -11,6 +11,7 @@ interface Match  {
 }
 
 
+
 router.post('/tasks', authenticateUser, async (req, res) => {
   // we are going to link specific users to tasks. Users should not be able to do anything if it's not their task.
   const task = new Task({
@@ -35,19 +36,20 @@ router.get('/tasks', authenticateUser,  async (req, res) => {
   // see this api and a user ever generating 1000 tasks it's a good skill to have, not supply the query string will return all tasks without the filtration.
   const match : Match = {}
 
-  const sort = {}
+  const sort : any = {}
 
   const limit: string = req.query.limit as string;
   const skip: string = req.query.skip as string;
+  const sortBy : string = req.query.sortBy as string;
 
   if (req.query.completed) {
     match.completed = req.query.completed === 'true';
   }
 
   if (req.query.sortBy) {
-    //@ts-ignore
-    const parts= req.query.sortBy.split(':');
-    //@ts-ignore
+    
+    const parts : Array<string>= sortBy.split(':');
+    
     sort[parts[0]] = parts[1] ==='desc' ? -1 : 1
   }
   
