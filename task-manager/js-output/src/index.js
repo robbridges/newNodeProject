@@ -25,9 +25,11 @@ const upload = (0, multer_1.default)({
         // cb(null, false);
     }
 });
-app.post('/upload', upload.single('upload'), (req, res) => {
-    res.send();
-});
+// app.post('/upload', upload.single('upload'), (req,res) => {
+//     res.send();
+// }, (error: Error,req :Express.Request,res: Express.Response,next : Function) => {
+//   res.status(400).send({error: error.message});
+// });
 app.use(express_1.default.json());
 app.use(user_1.default);
 app.use(task_1.default);

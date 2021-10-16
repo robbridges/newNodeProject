@@ -99,8 +99,10 @@ router.get('/users/me',authenticateUser , async (req, res) => {
 });
 
 // some multer magic to allow users to upload a user avatar easily.
-router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+router.post('/users/me/avatar', upload.single('avatar'), (req: express.Request, res: express.Response) => {
   res.send('file uploaded');
+}, (error: Error, req: express.Request, res: express.Response, next : Function) => {
+  res.status(400).send({error: error.message});
 })
 
 

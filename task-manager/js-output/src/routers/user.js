@@ -83,6 +83,8 @@ router.get('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, 
 // some multer magic to allow users to upload a user avatar easily.
 router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
     res.send('file uploaded');
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
 });
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -29,9 +29,13 @@ const upload = multer({
   }
 });
 
-app.post('/upload', upload.single('upload'), (req,res) => {
-    res.send();
-});
+
+ 
+// app.post('/upload', upload.single('upload'), (req,res) => {
+//     res.send();
+// }, (error: Error,req :Express.Request,res: Express.Response,next : Function) => {
+//   res.status(400).send({error: error.message});
+// });
 
 
 
