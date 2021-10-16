@@ -7,7 +7,6 @@ const router = express.Router();
 
 interface Match  {
   completed? : boolean
-  
 }
 
 
@@ -36,7 +35,7 @@ router.get('/tasks', authenticateUser,  async (req, res) => {
   // see this api and a user ever generating 1000 tasks it's a good skill to have, not supply the query string will return all tasks without the filtration.
   const match : Match = {}
 
-  const sort : any = {}
+  const sort : any= {}
 
   const limit: string = req.query.limit as string;
   const skip: string = req.query.skip as string;

@@ -15,6 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../models/user"));
 const auth_1 = __importDefault(require("../middleware/auth"));
+const multer_1 = __importDefault(require("multer"));
+const upload = (0, multer_1.default)({
+    dest: 'avatars',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Accepted formats are jpg, jpeg, and png files only.'));
+        }
+        cb(null, true);
+    }
+});
 const router = express_1.default.Router();
 router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = new user_1.default(req.body);
@@ -67,6 +80,10 @@ router.post('/users/logoutAll', auth_1.default, (req, res) => __awaiter(void 0, 
 router.get('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(req.user);
 }));
+// some multer magic to allow users to upload a user avatar easily.
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+    res.send('file uploaded');
+});
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

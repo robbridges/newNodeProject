@@ -1,6 +1,8 @@
 import express from 'express';
 import User from '../models/user';
 import authenticateUser from '../middleware/auth';
+import multer from 'multer';
+
 
 // we need to create a mock user interface if the id and email that we'll need for logins, then we need to change expresses Global configuration to add use as an object on the request type
 interface User {
@@ -23,6 +25,19 @@ declare global {
     }
   }
 }
+
+const upload = multer({
+  dest: 'avatars',
+  limits: {
+    fileSize: 1000000
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return cb(new Error('Accepted formats are jpg, jpeg, and png files only.'));
+    }
+    cb(null, true);
+  }
+});
 
 const router = express.Router();
 
@@ -82,6 +97,13 @@ router.post('/users/logoutAll', authenticateUser, async (req,res) => {
 router.get('/users/me',authenticateUser , async (req, res) => {
   res.send(req.user)
 });
+
+// some multer magic to allow users to upload a user avatar easily.
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+  res.send('file uploaded');
+})
+
+
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/users/me', authenticateUser, async (req, res) => {
   try {
