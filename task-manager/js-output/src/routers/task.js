@@ -35,6 +35,8 @@ router.get('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, voi
     // see this api and a user ever generating 1000 tasks it's a good skill to have, not supply the query string will return all tasks without the filtration.
     const match = {};
     const sort = {};
+    const limit = req.query.limit;
+    const skip = req.query.skip;
     if (req.query.completed) {
         match.completed = req.query.completed === 'true';
     }
@@ -49,10 +51,8 @@ router.get('/tasks', auth_1.default, (req, res) => __awaiter(void 0, void 0, voi
             path: 'tasks',
             match,
             options: {
-                //@ts-ignore
-                limit: parseInt(req.query.limit),
-                //@ts-ignore
-                skip: parseInt(req.query.skip),
+                limit: parseInt(limit),
+                skip: parseInt(skip),
                 sort,
             }
         });

@@ -37,6 +37,9 @@ router.get('/tasks', authenticateUser,  async (req, res) => {
 
   const sort = {}
 
+  const limit: string = req.query.limit as string;
+  const skip: string = req.query.skip as string;
+
   if (req.query.completed) {
     match.completed = req.query.completed === 'true';
   }
@@ -47,17 +50,15 @@ router.get('/tasks', authenticateUser,  async (req, res) => {
     //@ts-ignore
     sort[parts[0]] = parts[1] ==='desc' ? -1 : 1
   }
-
+  
 
   try {
     await req.user.populate({
       path: 'tasks',
       match,
       options: {
-        //@ts-ignore
-        limit: parseInt(req.query.limit),
-        //@ts-ignore
-        skip: parseInt(req.query.skip),
+        limit: parseInt(limit),
+        skip: parseInt(skip),
         sort,
       }
     });
