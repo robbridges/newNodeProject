@@ -17,7 +17,6 @@ const user_1 = __importDefault(require("../models/user"));
 const auth_1 = __importDefault(require("../middleware/auth"));
 const multer_1 = __importDefault(require("multer"));
 const upload = (0, multer_1.default)({
-    dest: 'avatars',
     limits: {
         fileSize: 1000000
     },
@@ -77,15 +76,17 @@ router.post('/users/logoutAll', auth_1.default, (req, res) => __awaiter(void 0, 
         res.status(500).send();
     }
 }));
+// some multer magic to allow users to upload a user avatar easily.
+router.post('/users/me/avatar', auth_1.default, upload.single('avatar'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.user.avatar = req.file.buffer;
+    yield req.user.save();
+    res.send('file uploaded');
+}), (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+});
 router.get('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(req.user);
 }));
-// some multer magic to allow users to upload a user avatar easily.
-router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
-    res.send('file uploaded');
-}, (error, req, res, next) => {
-    res.status(400).send({ error: error.message });
-});
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
 router.patch('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -110,5 +111,10 @@ router.delete('/users/me', auth_1.default, (req, res) => __awaiter(void 0, void 
     catch (e) {
         res.status(500).send();
     }
+}));
+router.delete('/users/me/avatar', auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.user.avatar = undefined;
+    yield req.user.save();
+    res.send('Avatar deleted');
 }));
 exports.default = router;

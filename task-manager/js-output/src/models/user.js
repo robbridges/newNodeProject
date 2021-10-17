@@ -60,7 +60,10 @@ const userSchema = new mongoose_1.Schema({
                 type: String,
                 required: true,
             }
-        }]
+        }],
+    avatar: {
+        type: Buffer
+    }
 }, {
     timestamps: true,
 });

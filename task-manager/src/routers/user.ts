@@ -27,7 +27,6 @@ declare global {
 }
 
 const upload = multer({
-  dest: 'avatars',
   limits: {
     fileSize: 1000000
   },
@@ -94,16 +93,19 @@ router.post('/users/logoutAll', authenticateUser, async (req,res) => {
   }
 });
 
-router.get('/users/me',authenticateUser , async (req, res) => {
-  res.send(req.user)
-});
-
 // some multer magic to allow users to upload a user avatar easily.
-router.post('/users/me/avatar', upload.single('avatar'), (req: express.Request, res: express.Response) => {
+router.post('/users/me/avatar', authenticateUser, upload.single('avatar'), async (req: express.Request, res: express.Response) => {
+  req.user.avatar = req.file!.buffer
+  await req.user.save();
   res.send('file uploaded');
 }, (error: Error, req: express.Request, res: express.Response, next : Function) => {
   res.status(400).send({error: error.message});
 })
+
+router.get('/users/me',authenticateUser , async (req, res) => {
+  res.send(req.user)
+});
+
 
 
 // I had to change the FindByIdAnd Update methodology as that overriding any pre logic we would have. This is the correct way to do that. 
@@ -130,5 +132,11 @@ router.delete('/users/me', authenticateUser, async (req, res) => {
     res.status(500).send();
   }
 });
+
+router.delete('/users/me/avatar', authenticateUser, async (req, res) => {
+  req.user!.avatar = undefined;
+  await req.user!.save();
+  res.send('Avatar deleted');
+})
 
 export default router;

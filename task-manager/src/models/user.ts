@@ -9,8 +9,9 @@ interface User {
   age: number,
   email: string,
   password: string,
-  tokens: [string],
-  [key: string]: string | number | Array<string>,
+  tokens: string[],
+  avatar: BufferConstructor,
+  [key: string ]: string | number | Array<string> | BufferConstructor,
   
   
 }
@@ -62,7 +63,10 @@ const userSchema = new Schema<User>({
       type: String, 
       required: true,
     }
-  }]
+  }],
+  avatar: {
+    type: Buffer
+  }
 }, {
   timestamps: true,
 });
