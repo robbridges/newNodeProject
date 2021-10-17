@@ -13,9 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const multer_1 = __importDefault(require("multer"));
+const sharp_1 = __importDefault(require("sharp"));
 const user_1 = __importDefault(require("../models/user"));
 const auth_1 = __importDefault(require("../middleware/auth"));
-const multer_1 = __importDefault(require("multer"));
 const upload = (0, multer_1.default)({
     limits: {
         fileSize: 1000000
@@ -78,7 +79,8 @@ router.post('/users/logoutAll', auth_1.default, (req, res) => __awaiter(void 0, 
 }));
 // some multer magic to allow users to upload a user avatar easily.
 router.post('/users/me/avatar', auth_1.default, upload.single('avatar'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.user.avatar = req.file.buffer;
+    const buffer = yield (0, sharp_1.default)(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer();
+    req.user.avatar = buffer;
     yield req.user.save();
     res.send('file uploaded');
 }), (error, req, res, next) => {
@@ -123,7 +125,7 @@ router.get('/users/:id/avatar', (req, res) => __awaiter(void 0, void 0, void 0, 
         if (!user || !user.avatar) {
             throw new Error();
         }
-        res.set('Content-Type', 'image/jpg');
+        res.set('Content-Type', 'image/png');
         res.send(user.avatar);
     }
     catch (e) {

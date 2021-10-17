@@ -1,7 +1,8 @@
 import express from 'express';
+import multer from 'multer';
+import sharp from 'sharp';
 import User from '../models/user';
 import authenticateUser from '../middleware/auth';
-import multer from 'multer';
 
 
 // we need to create a mock user interface if the id and email that we'll need for logins, then we need to change expresses Global configuration to add use as an object on the request type
@@ -95,7 +96,9 @@ router.post('/users/logoutAll', authenticateUser, async (req,res) => {
 
 // some multer magic to allow users to upload a user avatar easily.
 router.post('/users/me/avatar', authenticateUser, upload.single('avatar'), async (req: express.Request, res: express.Response) => {
-  req.user.avatar = req.file!.buffer
+  const buffer = await sharp(req.file!.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
+  
+  req.user.avatar = buffer;
   await req.user.save();
   res.send('file uploaded');
 }, (error: Error, req: express.Request, res: express.Response, next : Function) => {
@@ -147,7 +150,7 @@ router.get('/users/:id/avatar', async ( req, res) => {
       throw new Error();
     }
 
-    res.set('Content-Type', 'image/jpg')
+    res.set('Content-Type', 'image/png')
     res.send(user.avatar);
 
   } catch(e) {
