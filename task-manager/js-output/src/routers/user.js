@@ -117,4 +117,17 @@ router.delete('/users/me/avatar', auth_1.default, (req, res) => __awaiter(void 0
     yield req.user.save();
     res.send('Avatar deleted');
 }));
+router.get('/users/:id/avatar', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield user_1.default.findById(req.params.id);
+        if (!user || !user.avatar) {
+            throw new Error();
+        }
+        res.set('Content-Type', 'image/jpg');
+        res.send(user.avatar);
+    }
+    catch (e) {
+        res.status(404).send();
+    }
+}));
 exports.default = router;
