@@ -49,6 +49,7 @@ node_modules/
 jspm_packages/
 images/
 avatars/
+task-manager/src/emails
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
