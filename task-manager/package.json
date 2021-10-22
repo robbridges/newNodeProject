@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node jsoutput/index.js",
     "dev": "nodemon jsoutput/src/index.js"
   },
@@ -14,11 +14,13 @@
   "dependencies": {
     "@sendgrid/mail": "^7.4.7",
     "@types/bcrypt": "^5.0.0",
+    "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/multer": "^1.4.7",
     "@types/sharp": "^0.29.2",
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
+    "jest": "^27.3.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.2",
     "mongoose": "^6.0.8",
