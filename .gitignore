@@ -49,6 +49,7 @@ node_modules/
 jspm_packages/
 images/
 avatars/
+config/
 task-manager/src/emails
 task-manager/jsoutput/src/emails
 

@@ -4,12 +4,12 @@ import User from '../models/user';
 
 
 
-
+const jwtSecret: string = process.env.JWT_SECRET as string
 
 const auth = async (req : express.Request, res : express.Response, next : Function) => {
   try {
     const token = req.header('Authorization')!.replace('Bearer ', '');
-    const decoded : any = jwt.verify(token, 'yamyamyoyam');
+    const decoded : any = jwt.verify(token, jwtSecret);
     const user = await User.findOne({_id: decoded['_id'], 'tokens.token': token});
 
     if (!user) {

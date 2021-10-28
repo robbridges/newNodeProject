@@ -1,8 +1,9 @@
 import mongoose, {Schema, model,} from 'mongoose';
 import validator from 'validator';
 
+const dataBaseUrl: string = process.env.MONGODB_URL as string
 
-mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {});
+mongoose.connect(dataBaseUrl, {});
 
 
 
