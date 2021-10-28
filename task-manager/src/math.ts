@@ -11,6 +11,14 @@ export class Math {
   public static celsiusToFahrenheit = (temp: number): number => {
     return (temp * 1.8) + 32;
   }
+
+  public static add = (a: number, b: number): Promise<number> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(a + b)
+      }, 2000)
+    })
+  }
 }
 
 
