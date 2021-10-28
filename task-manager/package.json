@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "env-cmd -f ./config/test.env jest --watch",
     "start": "node jsoutput/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon jsoutput/src/index.js"
   },
@@ -32,8 +32,10 @@
   },
   "devDependencies": {
     "@types/mongodb": "^4.0.7",
+    "@types/supertest": "^2.0.11",
     "@types/validator": "^13.6.3",
     "jest": "^27.3.1",
+    "supertest": "^6.1.6",
     "ts": "^0.2.2",
     "ts-jest": "^27.0.7"
   }
