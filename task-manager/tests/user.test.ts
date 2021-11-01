@@ -25,18 +25,35 @@ beforeEach( async() => {
 
 
 test('Should signup a new user', async () => {
-  await request(app).post('/users').send({
+  const response = await request(app).post('/users').send({
     name: 'Rob',
     email: 'Rob@Rob.com',
     password: 'robrob777!'
   }).expect(201);
+
+  const user = await User.findById(response.body.user._id);
+  expect(user).not.toBeNull();
+
+  expect(response.body).toMatchObject({
+    user: {
+      name: 'Rob',
+      email: 'rob@rob.com'
+    },
+    
+    token: user!.tokens[0].token
+  })
+
+  expect(user!.password).not.toBe('robrob777!')
 })
 
 test('Should login existing user', async () => {
-  await request(app).post('/users/login').send({
+  const response = await request(app).post('/users/login').send({
     email: userOne.email,
     password: userOne.password,
   }).expect(200)
+
+  const user = await User.findById(userOneId);
+  expect(response.body.token).toBe(user!.tokens[1].token);
 });
 
 test('Does not login user with bad info', async () => {
@@ -67,6 +84,10 @@ test('Should delete user account with authorization credentials sent', async () 
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send()
     .expect(200);
+  
+  const user = await User.findById(userOneId);
+  expect(user).toBeNull();
+
 });
 
 test('Should fail to delete account without authorzation header', async () => {

@@ -9,7 +9,7 @@ interface User {
   age: number,
   email: string,
   password: string,
-  tokens: string[],
+  tokens: string[] | any,
   avatar: BufferConstructor,
   [key: string ]: string | number | Array<string> | BufferConstructor,
   

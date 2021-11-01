@@ -32,17 +32,29 @@ beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
     yield new user_1.default(userOne).save();
 }));
 test('Should signup a new user', () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, supertest_1.default)(app).post('/users').send({
+    const response = yield (0, supertest_1.default)(app).post('/users').send({
         name: 'Rob',
         email: 'Rob@Rob.com',
         password: 'robrob777!'
     }).expect(201);
+    const user = yield user_1.default.findById(response.body.user._id);
+    expect(user).not.toBeNull();
+    expect(response.body).toMatchObject({
+        user: {
+            name: 'Rob',
+            email: 'rob@rob.com'
+        },
+        token: user.tokens[0].token
+    });
+    expect(user.password).not.toBe('robrob777!');
 }));
 test('Should login existing user', () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, supertest_1.default)(app).post('/users/login').send({
+    const response = yield (0, supertest_1.default)(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password,
     }).expect(200);
+    const user = yield user_1.default.findById(userOneId);
+    expect(response.body.token).toBe(user.tokens[1].token);
 }));
 test('Does not login user with bad info', () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, supertest_1.default)(app).post('/users/login').send({
@@ -69,6 +81,8 @@ test('Should delete user account with authorization credentials sent', () => __a
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .send()
         .expect(200);
+    const user = yield user_1.default.findById(userOneId);
+    expect(user).toBeNull();
 }));
 test('Should fail to delete account without authorzation header', () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, supertest_1.default)(app)
