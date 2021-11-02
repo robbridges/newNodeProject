@@ -90,3 +90,23 @@ test('Should fail to delete account without authorzation header', () => __awaite
         .send()
         .expect(401);
 }));
+test('Should upload an avatar image', () => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, supertest_1.default)(app)
+        .post('/users/me/avatar')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('avatar', 'tests/fixtures/profile-pic.jpg')
+        .expect(200);
+    const user = yield user_1.default.findById(userOneId);
+    expect(user.avatar).toEqual(expect.any(Buffer));
+}));
+test('Should update user fields', () => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, supertest_1.default)(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+        name: 'Steve'
+    });
+    expect(200);
+    const user = yield user_1.default.findById(userOneId);
+    expect(user.name).toBe('Steve');
+}));
