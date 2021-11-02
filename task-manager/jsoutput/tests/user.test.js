@@ -14,22 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const user_1 = __importDefault(require("../src/models/user"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const mongoose_1 = __importDefault(require("mongoose"));
+const { userOneId, userOne, setUpDatabase } = require('./fixtures/db');
 const app = require('../src/app');
-const userOneId = new mongoose_1.default.Types.ObjectId();
-const userOne = {
-    _id: userOneId,
-    name: 'Fake user',
-    email: 'Imnotreal@example.com',
-    password: '123fourfivesix',
-    tokens: [{
-            token: jsonwebtoken_1.default.sign({ _id: userOneId }, process.env.JWT_SECRET)
-        }]
-};
 beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
-    yield user_1.default.deleteMany();
-    yield new user_1.default(userOne).save();
+    yield setUpDatabase();
 }));
 test('Should signup a new user', () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield (0, supertest_1.default)(app).post('/users').send({
