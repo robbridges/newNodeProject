@@ -18,6 +18,7 @@
   "homepage": "https://github.com/robbridges/newNodeProject#readme",
   "description": "",
   "dependencies": {
+    "@types/socket.io": "^3.0.2",
     "@types/yargs": "^17.0.3"
   },
   "devDependencies": {

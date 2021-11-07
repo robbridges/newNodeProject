@@ -13,7 +13,7 @@ var io = socketio(server);
 var port = process.env.PORT || 3000;
 var publicPathDir = path_1.default.join(__dirname, '../public');
 app.use(express_1.default.static(publicPathDir));
-io.on('connection', function () {
+io.on('connect', function () {
     console.log('New websocket connection');
 });
 server.listen(port, function () {
