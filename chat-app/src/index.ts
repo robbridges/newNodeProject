@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import path from 'path'
+import { Socket } from 'socket.io';
 const socketio = require('socket.io');
 
 const app = express();
@@ -12,8 +13,20 @@ const publicPathDir = path.join(__dirname, '../public');
 
 app.use(express.static(publicPathDir));
 
-io.on('connection', () => {
+
+io.on('connection', (socket : Socket) => {
   console.log('New websocket connection');
+  const welcome : string = "welcome!"
+  socket.emit('message', welcome);
+  socket.broadcast.emit('message', 'A new user has joined');
+
+  socket.on('sendMessage', (message) => {
+    io.emit('message', message);
+  })
+
+  socket.on('disconnect', () => {
+    io.emit('message', 'A user has left');
+  })
 })
 
 server.listen(port, () => {

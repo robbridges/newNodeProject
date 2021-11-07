@@ -13,8 +13,17 @@ var io = socketio(server);
 var port = process.env.PORT || 3000;
 var publicPathDir = path_1.default.join(__dirname, '../public');
 app.use(express_1.default.static(publicPathDir));
-io.on('connection', function () {
+io.on('connection', function (socket) {
     console.log('New websocket connection');
+    var welcome = "welcome!";
+    socket.emit('message', welcome);
+    socket.broadcast.emit('message', 'A new user has joined');
+    socket.on('sendMessage', function (message) {
+        io.emit('message', message);
+    });
+    socket.on('disconnect', function () {
+        io.emit('message', 'A user has left');
+    });
 });
 server.listen(port, function () {
     console.log("listening on port " + port);
