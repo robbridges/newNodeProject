@@ -18,8 +18,12 @@ io.on('connection', function (socket) {
     var welcome = "welcome!";
     socket.emit('message', welcome);
     socket.broadcast.emit('message', 'A new user has joined');
-    socket.on('sendMessage', function (message) {
+    socket.on('sendMessage', function (message, callback) {
         io.emit('message', message);
+        callback();
+    });
+    socket.on('sendLocation', function (positionObj) {
+        io.emit('message', "https://google.com/maps?q=" + positionObj.latitude + "," + positionObj.longitude);
     });
     socket.on('disconnect', function () {
         io.emit('message', 'A user has left');
