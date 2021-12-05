@@ -18,11 +18,12 @@ io.on('connection', function (socket) {
     var welcome = "welcome!";
     socket.emit('message', welcome);
     socket.broadcast.emit('message', 'A new user has joined');
-    socket.on('sendMessage', function (message) {
+    socket.on('sendMessage', function (message, callback) {
         io.emit('message', message);
+        callback('Message Delivered');
     });
     socket.on('sendLocation', function (positionObj, callback) {
-        io.emit('message', "https://google.com/maps?q=" + positionObj.latitude + "," + positionObj.longitude);
+        io.emit('locationMessage', "https://google.com/maps?q=" + positionObj.latitude + "," + positionObj.longitude);
         callback();
     });
     socket.on('disconnect', function () {

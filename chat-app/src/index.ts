@@ -20,12 +20,13 @@ io.on('connection', (socket : Socket) => {
   socket.emit('message', welcome);
   socket.broadcast.emit('message', 'A new user has joined');
 
-  socket.on('sendMessage', (message) => {
+  socket.on('sendMessage', (message, callback) => {
     io.emit('message', message);
+    callback('Message Delivered');
   })
 
   socket.on('sendLocation', (positionObj, callback) => {
-    io.emit('message', `https://google.com/maps?q=${positionObj.latitude},${positionObj.longitude}`);
+    io.emit('locationMessage', `https://google.com/maps?q=${positionObj.latitude},${positionObj.longitude}`);
     callback();
   })
 
